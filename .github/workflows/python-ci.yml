@@ -16,8 +16,8 @@ env:
 
 jobs:
   build:
-    runs-on:
-      - ubuntu-latest
+    runs-on: ubuntu-latest      # or self-hosted if you have one
+    environment: testing        # <-- Add this line
 
     steps:
       - name: Checkout repository
@@ -26,26 +26,19 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.11'
-          cache: 'pip'
+          python-version: "3.11"
 
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
           python -m pip install -r requirements.txt
 
-      - name: Verify environment
+      - name: Verify Environment
         run: |
-          echo "Runner OS: $RUNNER_OS"
-          python --version
-          python -m pip --version
           echo "APP_NAME=$APP_NAME"
           echo "ENVIRONMENT=$ENVIRONMENT"
           echo "FEATURE_FLAG=$FEATURE_FLAG"
           echo "LOG_LEVEL=$LOG_LEVEL"
-          if [ -n "$API_TOKEN" ]; then echo "API_TOKEN is configured"; else echo "API_TOKEN is not configured"; fi
-          if [ -n "$DB_PASSWORD" ]; then echo "DB_PASSWORD is configured"; else echo "DB_PASSWORD is not configured"; fi
 
-      - name: Run Python app
-        run: |
-          python app.py
+      - name: Run Python Application
+        run: python app.py
